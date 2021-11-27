@@ -62,7 +62,7 @@ if __name__ == '__main__':
     urls = get_photo(id_vk)
     pprint(urls)
 
-    token = 'AQAAAAAb702VAADLW8tCNia9yU5JlUg_5YVBPtI'
+    token = ''
 
     album = Path("Games", "VK_photo")
 

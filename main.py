@@ -57,12 +57,13 @@ def upload_photo():
 
 
 if __name__ == '__main__':
-    id_vk = '552934290'
+    id_vk = input('введите id: ')
+    # '552934290'
 
     urls = get_photo(id_vk)
     pprint(urls)
 
-    token = ''
+    token = input('Введите токен')
 
     album = Path("Games", "VK_photo")
 

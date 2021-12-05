@@ -79,7 +79,7 @@ if __name__ == '__main__':
     # pprint(urls)
 
     # token = input('Введите токен')
-    token = 'AQAAAAAb702VAADLW8tCNia9yU5JlUg_5YVBPtI'
+    token = '...'
     album = Path("VK_photo")
 
     new_folder()

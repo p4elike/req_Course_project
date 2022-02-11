@@ -5,7 +5,7 @@ from tqdm import tqdm
 import collections
 
 
-TOKEN = 'AQAAAAAb702VAADLW8tCNia9yU5JlUg_5YVBPtI'
+TOKEN = '...'
 headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {TOKEN}'}
 
 with tqdm(total=100) as pbar:

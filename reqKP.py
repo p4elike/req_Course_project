@@ -2,17 +2,8 @@ import requests
 from pprint import pprint
 import time
 from tqdm import tqdm
+import json
 import collections
-
-
-TOKEN = '...'
-headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {TOKEN}'}
-
-with tqdm(total=100) as pbar:
-
-    for i in range(100):
-        time.sleep(0.05)
-        pbar.update(1)
 
 
 def get_photo(id_vk):
@@ -32,7 +23,7 @@ def get_photo(id_vk):
     response = requests.get(url=url, params=params).json()
     response1 = response['response']['items']
     count = collections.Counter()
-    for photo in response1:
+    for photo in tqdm(response1):
         name_keys = (photo['likes']['count'])
         count[name_keys] += 1
         if count[name_keys] >= 2:
@@ -52,39 +43,36 @@ def create_folder(path):
     params = {"path": path, "overwrite": "true"}
     response = requests.put(url=url, headers=headers, params=params)
     response = response.json()
-    response = response.get('href')
-    pprint(response)
-    pbar.update(1)
     return response
 
 
 def for_upload_photo(urls):
     """Загрузка фоток."""
-    for dict_photo in urls:
+    photo_info_list = []
+    for dict_photo in tqdm(urls[0:count_photos]):
         for name_photo, url_photo in dict_photo.items():
-
             url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
             params = {"path": 'VK_photo/' + str(name_photo),
                       'url': url_photo,
                       "disable_redirects": "false"}
             response = requests.post(url=url,  headers=headers, params=params)
-            pbar.update(1)
             pprint(response)
-
+            photo_info_list.append(response.json())
+    return photo_info_list
 
 
 if __name__ == '__main__':
-
     id_vk = '552934290'
+    # id_vk = input('Введите id страницы VK:')
     path = '/VK_photo/'
+    TOKEN = 'AQAAAAAb702VAADLW8tCNia9yU5JlUg_5YVBPtI'
+    # TOKEN = input('Введите token yandex.disk:')
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {TOKEN}'}
+    count_photos = 3
+    # count_photos = input('Введите количество фотографий, которые необходимо загрузить:')
 
     urls = get_photo(id_vk)
-    for item in tqdm(range(10)):
-        time.sleep(1)
-        pass
     create_folder(path)
-    for item in tqdm(range(10)):
-        time.sleep(1)
-        pass
-    for_upload_photo(urls)
 
+    with open('data.txt', 'w') as file:
+        json.dump(for_upload_photo(urls), file)
